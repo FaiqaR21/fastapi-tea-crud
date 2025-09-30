@@ -4,5 +4,11 @@
     "email": "erer",
     "full_name": "ss",
     "password": "xxx"
+  },
+  {
+    "phone": 10,
+    "email": "faiqa@gmail.com",
+    "full_name": "Faiqa Rauf",
+    "password": "Faiqa"
   }
 ]
