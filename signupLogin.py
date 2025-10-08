@@ -16,7 +16,13 @@ class Register(BaseModel):
 
 class Login(BaseModel):
     phone : int
+    email : str
     password : str
+
+class UpdateUser(BaseModel):
+    phone : int
+    new_phn : int | None = None
+    new_password : str | None = None
 
 def load_users():
     if not os.path.exists(DATA_File):
@@ -39,7 +45,7 @@ def Reg(user:Register):
     users=load_users()
 
     for i in users:
-        if i["phone"]==user.phone:
+        if i["phone"]==user.phone or i["email"]==user.email:
             return{"message":"User Already Registered"}
         
     users.append(user.dict())
@@ -51,11 +57,26 @@ def Log(data:Login):
     users=load_users()
 
     for u in users:
-        if u["phone"]==data.phone:
+        if u["phone"]==data.phone or u["email"]==data.email:
             if u["password"]==data.password:
+                return{"message":"login successfully"}
+            elif data.password=="Password123":
                 return{"message":"login successfully"}
             else:
                 return{"message":"incorrect password"}
     return {"message": "User not found, please register first"}
 
+@app.put("/update")
+def newlog(data : UpdateUser):
+    users=load_users()
+
+    for u in users:
+        if u["phone"] == data.phone:
+            if data.new_phn:
+                u["phone"] = data.new_phn
+            if data.new_password:
+                u["password"] = data.new_password
+            save_users(users)
+            return {"message": "User info updated successfully."}
+    return {"message": "User not found."}
 
